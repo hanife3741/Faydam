@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Faydam</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="kadi">Kullanıcı Adı :</string>
+    <string name="password">Şifre :</string>
+    <string name="girisBtn">GİRİŞ</string>
+
+</resources>
