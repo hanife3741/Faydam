@@ -19,18 +19,11 @@ import java.util.Properties;
  */
 public class WebservisCallerImpl implements WebServisCaller {
 
-
-
-
-
-
     private static  String NAMESPACE=null;
     private static  String SERVIS_URL=null;
     private static  String DOGRULA_METHOD=null;
     private static  String SOAP_DOGRULA_ACTION=null;
     public boolean KullaniciVarMi(KullaniciVarMiInput input){
-
-
         //properties nesnesini oluştur
         Properties prop = new Properties();
         //properties değerlerini /src/main/assets/app.properties dosyasından stream e oku
