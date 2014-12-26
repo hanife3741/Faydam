@@ -1,6 +1,10 @@
 package com.esogu.hanife.faydam;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -41,23 +45,30 @@ public class WebservisCallerImpl implements WebServisCaller {
         SOAP_DOGRULA_ACTION=NAMESPACE+DOGRULA_METHOD;
 
         SoapObject request = new SoapObject(NAMESPACE, DOGRULA_METHOD);
-        request.addProperty("KullaniciAdi", input.getKullaniciAdi());
-        request.addProperty("Sifre",input.getSifre());
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        request.addProperty("kullaniciAd", input.getKullaniciAdi());
+        request.addProperty("sifre",input.getSifre());
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet=true;
         //envelope.avoidExceptionForUnknownProperty = true;
         envelope.encodingStyle=SoapEnvelope.ENC;
-        envelope.setAddAdornments(false);
-        envelope.implicitTypes=false;
+        //envelope.setAddAdornments(false);
+        //envelope.implicitTypes=false;
         envelope.setOutputSoapObject(request);
         HttpTransportSE androidHttpTransport=new HttpTransportSE(SERVIS_URL);
+
         try {
             androidHttpTransport.call(SOAP_DOGRULA_ACTION,envelope);
-            if(envelope.bodyIn instanceof SoapObject){
-                SoapObject soapObject=(SoapObject) envelope.bodyIn;
-                KullaniciVarMiInput kullaniciVarMiResult=new Gson().fromJson((String) soapObject.getProperty(0),KullaniciVarMiInput.class);
 
-                return (kullaniciVarMiResult.getKullaniciAdi().toString() != "");
+            if(envelope.bodyIn instanceof SoapObject){
+                SoapObject soapObject = (SoapObject) envelope.bodyIn;
+
+                Gson gson = new GsonBuilder().create();
+                SensorBilgileri sensor = gson.fromJson( gson.toJson( soapObject.getProperty(0) ) ,SensorBilgileri.class);
+                if(sensor.getValue().equals(""))
+                  return false; //eğer sensör bilgisi gelmedi ise false dönder
+                else
+                  return true;//eğer sensör bilgisi geldi ise true dönder
+
             }else if(envelope.bodyIn instanceof SoapFault){
                 SoapFault soapFault = (SoapFault) envelope.bodyIn;
                 throw new Exception(soapFault.getMessage());
@@ -68,4 +79,3 @@ public class WebservisCallerImpl implements WebServisCaller {
         return false;
     }
 }
-
