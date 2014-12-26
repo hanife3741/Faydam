@@ -7,18 +7,18 @@ public class KullaniciVarMiInput {
     public class KullaniciAdiResult {
         public boolean KullaniciVarMiResult;
     }
-    private String KullaniciAdi;
-    private String Sifre;
+    private String kullaniciAd;
+    private String sifre;
     public String getKullaniciAdi() {
-        return KullaniciAdi;
+        return kullaniciAd;
     }
     public String getSifre() {
-        return Sifre;
+        return sifre;
     }
     public void setKullaniciAdi(String kullaniciAdi){
-        this.KullaniciAdi=kullaniciAdi;
+        this.kullaniciAd=kullaniciAdi;
     }
     public void setSifre(String sifre) {
-        this.Sifre=sifre;
+        this.sifre=sifre;
     }
 }

@@ -3,6 +3,8 @@ package com.esogu.hanife.faydam;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -55,14 +57,18 @@ public class WebservisCallerImpl implements WebServisCaller {
         HttpTransportSE androidHttpTransport=new HttpTransportSE(SERVIS_URL);
 
         try {
-            androidHttpTransport.debug = true;
             androidHttpTransport.call(SOAP_DOGRULA_ACTION,envelope);
 
             if(envelope.bodyIn instanceof SoapObject){
-                SoapObject soapObject=(SoapObject) envelope.bodyIn;
-                KullaniciVarMiInput kullaniciVarMiResult=new Gson().fromJson(soapObject.getProperty(0).toString() ,KullaniciVarMiInput.class);
+                SoapObject soapObject = (SoapObject) envelope.bodyIn;
 
-                return (kullaniciVarMiResult.getKullaniciAdi() != "");
+                Gson gson = new GsonBuilder().create();
+                SensorBilgileri sensor = gson.fromJson( gson.toJson( soapObject.getProperty(0) ) ,SensorBilgileri.class);
+                if(sensor.getValue().equals(""))
+                  return false; //eğer sensör bilgisi gelmedi ise false dönder
+                else
+                  return true;//eğer sensör bilgisi geldi ise true dönder
+
             }else if(envelope.bodyIn instanceof SoapFault){
                 SoapFault soapFault = (SoapFault) envelope.bodyIn;
                 throw new Exception(soapFault.getMessage());
